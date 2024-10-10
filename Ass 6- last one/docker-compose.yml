@@ -1,0 +1,53 @@
+# version: '3.8'
+
+# services:
+#   react-app:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     ports:
+#       - "3000:3000"
+#     depends_on:
+#       - mongo
+#     environment:
+#       - MONGO_URI=mongodb+srv://u23782219:u23782219@ass-6.qmoos.mongodb.net/?retryWrites=true&w=majority&appName=Ass-6
+
+#   mongo:
+#     image: mongo
+#     container_name: app_mongo
+#     restart: always
+#     ports:
+#       - "27017:27017"
+#     volumes:
+#       - mongo_data:/data/db
+
+# volumes:
+#   mongo_data:    
+
+
+services:
+  frontend:
+    build:
+      context: .   # Path to your frontend folder
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/usr/src/app  # Mounts the frontend code
+    ports:
+      - "3000:3000"  # Maps the port of the container to the host
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    volumes:
+      - mongodb_data:/data/db  # Persistent storage for MongoDB
+    ports:
+      - "27017:27017"  # Exposes MongoDB on port 27017
+    networks:
+      - mongo-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  mongo-network:
